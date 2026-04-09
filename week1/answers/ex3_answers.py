@@ -42,47 +42,455 @@ Conversation 3 (out of scope):
 # ── Conversation 1: Happy path ─────────────────────────────────────────────
 
 CONVERSATION_1_TRACE = """
-PASTE YOUR rasa shell TERMINAL OUTPUT HERE
+Bot loaded. Type a message and press enter (use '/stop' to exit):
+Your input ->  calling to confirm a booking
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+How many guests are you confirming for tonight's event?
+Your input ->  160 guests
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+And how many of those guests will need vegan meals?
+Your input ->  about 50 need vegan
+What deposit amount in GBP are you proposing to secure the booking?
+Your input ->  GBP 200 deposit
+Thank you — booking confirmed. 160 guests, 50 requiring vegan meals, £200 deposit accepted. I'll send written confirmation to the organiser shortly.
+Is there anything else I can help you with?
 """
 
-CONVERSATION_1_OUTCOME = "FILL_ME_IN"   # "confirmed" or "escalated"
+#DK: I have no idea why Provider List: https://docs.litellm.ai/docs/providers appears above, but I included it as per instructions
+
+CONVERSATION_1_OUTCOME = "confirmed"   # "confirmed" or "escalated"
 
 # ── Conversation 2: Deposit too high ───────────────────────────────────────
 
 CONVERSATION_2_TRACE = """
-PASTE YOUR rasa shell TERMINAL OUTPUT HERE
+Bot loaded. Type a message and press enter (use '/stop' to exit):
+Your input ->  calling to confirm a booking
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+How many guests are you confirming for tonight's event?
+Your input ->  160 guests
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+And how many of those guests will need vegan meals?
+Your input ->  about 50 need vegan
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+What deposit amount in GBP are you proposing to secure the booking?
+Your input ->  GBP 1000 deposit
+I need to check one thing with the organiser before I can confirm. The issue is: a deposit of £1000 exceeds the organiser's authorised limit of £300. Can I call you back within 15 minutes?
+Is there anything else I can help you with?
+
 """
 
-CONVERSATION_2_OUTCOME = "FILL_ME_IN"   # "confirmed" or "escalated"
-CONVERSATION_2_REASON  = "FILL_ME_IN"   # the reason the agent gave for escalating
+CONVERSATION_2_OUTCOME = "escalated"   # "confirmed" or "escalated"
+CONVERSATION_2_REASON  = "deposit of £1000 exceeds the organiser's authorised limit of £300"   # the reason the agent gave for escalating
 
 # ── Conversation 3: Out of scope ───────────────────────────────────────────
 
 CONVERSATION_3_TRACE = """
-PASTE YOUR rasa shell TERMINAL OUTPUT HERE
+Bot loaded. Type a message and press enter (use '/stop' to exit):
+Your input ->  calling to confirm a booking
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+How many guests are you confirming for tonight's event?
+Your input ->  160 guests
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+
+
+Provider List: https://docs.litellm.ai/docs/providers
+
+And how many of those guests will need vegan meals?
+Your input ->  can you arrange parking for speake
+rs?
+I'm sorry, I'm not trained to help with that.
+I can only help with confirming tonight's venue booking. For anything else, please contact the event organiser directly.
+Would you like to continue with confirm booking?
 """
 
 # Describe what CALM did after the out-of-scope message. Min 20 words.
 CONVERSATION_3_WHAT_HAPPENED = """
-FILL ME IN
+It responded with the reasonable comment on limits of its capabilities and provided a way to return to the original script as well as an option to escalate further.
 """
 
 # Compare Rasa CALM's handling of the out-of-scope request to what
 # LangGraph did in Exercise 2 Scenario 3. Min 40 words.
 OUT_OF_SCOPE_COMPARISON = """
-FILL ME IN
+As expected, LangGraph provided a more thorough answer with external sources when faced with the unexpected out-of-scope problem. Meanwhile, CALM behaved as programmed: it ran the error flow first and primed itself to continue with the primary flow. This fully coincides with the designed procedure.
 """
 
 # ── Task B: Cutoff guard ───────────────────────────────────────────────────
 
-TASK_B_DONE = None   # True or False
+TASK_B_DONE = True   # True or False
 
 # List every file you changed.
-TASK_B_FILES_CHANGED = []
+TASK_B_FILES_CHANGED = ["sovereign-agent-lab/exercise3_rasa/actions/action.py"]
 
 # How did you test that it works? Min 20 words.
 TASK_B_HOW_YOU_TESTED = """
-FILL ME IN
+I have changed system time to be after 16:45 and ran with the "happy path" script. It has gone well until the last moment where the model has raised the concern regarding insufficient time - "it is past 16:45 — insufficient time to process the confirmation before the 5 PM deadline", to quote.
 """
 
 # ── CALM vs Old Rasa ───────────────────────────────────────────────────────
@@ -101,12 +509,10 @@ FILL ME IN
 # Min 30 words.
 
 CALM_VS_OLD_RASA = """
-FILL ME IN
+While I have no experience with "Old Rasa" as this is not the part of the course, I believe the following is correct:
 
-Think about:
-- What does the LLM handle now that Python handled before?
-- What does Python STILL handle, and why (hint: business rules)?
-- Is there anything you trusted more in the old approach?
+- LLM handles parsing of user inputs, which is more convinient in terms of programming and user experience, but costs tokens.
+- Python is still used to hard-limit business rules and guarantee that the model cannot talk around them.
 """
 
 # ── The setup cost ─────────────────────────────────────────────────────────
@@ -120,10 +526,5 @@ Think about:
 # Min 40 words.
 
 SETUP_COST_VALUE = """
-FILL ME IN
-
-Be specific. What can the Rasa CALM agent NOT do that LangGraph could?
-Is that a feature or a limitation for the confirmation use case?
-Think about: can the CALM agent improvise a response it wasn't trained on?
-Can it call a tool that wasn't defined in flows.yml?
+Rasa CALM agent cannot provide external advice or direction, since it is literally programmed to follow the given flow. It can be considered a feature, since we do not want it to be able to improvise untrained responses or call imaginary tools. By sacrificing some freedom, we gain a more robust app, which is more useful for human interaction.
 """

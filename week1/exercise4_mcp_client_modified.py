@@ -32,6 +32,11 @@ Results saved to week1/outputs/ex4_results.json (~30 seconds).
 Then fill in week1/answers/ex4_answers.py.
 """
 
+"""
+NOTE from DK: Task was completed with changed code for the collecting tool results (see exercise4_mcp_client_modified)
+"""
+
+
 import asyncio
 import json
 import os
@@ -109,13 +114,25 @@ def extract_trace(result: dict) -> list:
     for m in result["messages"]:
         role    = getattr(m, "type", "unknown")
         content = m.content
-        if isinstance(content, list):
-            for block in content:
-                if isinstance(block, dict) and block.get("type") == "tool_use":
-                    trace.append({"role": "tool_call", "tool": block["name"],
-                                  "args": block.get("input", {})})
-        elif content:
+
+        # FIX: tool calls live in message.tool_calls, not content blocks
+        if hasattr(m, "tool_calls") and m.tool_calls:
+            for tc in m.tool_calls:
+                trace.append({
+                    "role": "tool_call",
+                    "tool": tc["name"],
+                    "args": tc.get("args", {}),
+                })
+            continue
+
+        # Capture tool results (the actual venue data coming back)
+        if role == "tool" and content:
+            trace.append({"role": "tool_result", "content": str(content)})
+            continue
+
+        if content:
             trace.append({"role": role, "content": str(content)})
+
     return trace
 
 
@@ -124,6 +141,11 @@ def print_trace(trace: list) -> None:
         if entry["role"] == "tool_call":
             args_str = json.dumps(entry.get("args", {}))[:80]
             print(f"  [TOOL_CALL] → {entry['tool']}({args_str})")
+        elif entry["role"] == "tool_result":
+            content = entry["content"]
+            if len(content) > 400:
+                content = content[:400] + "..."
+            print(f"  [TOOL_RESULT]\n  {content}\n")
         elif entry.get("content"):
             content = entry["content"]
             if len(content) > 400:
@@ -135,8 +157,9 @@ async def main() -> None:
     llm = ChatOpenAI(
         base_url="https://api.tokenfactory.nebius.com/v1/",
         api_key=os.getenv("NEBIUS_KEY"),
-        model="meta-llama/Llama-3.3-70B-Instruct",
+        model="Qwen/Qwen3-32B",
         temperature=0,
+        extra_body={"thinking": {"type": "disabled"}},
     )
 
     print("\nExercise 4 — LangGraph + MCP")
