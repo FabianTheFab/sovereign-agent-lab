@@ -65,13 +65,13 @@ OUTPUTS_DIR.mkdir(exist_ok=True)
 # every closure would share the last value of tool_name — a classic Python gotcha.
 
 def _make_mcp_caller(tool_name: str, server_script: str):
-    def call(**kwargs) -> str:
+    def call(input: dict) -> str:  # ← single dict, not **kwargs
         async def _inner() -> str:
             params = StdioServerParameters(command=sys.executable, args=[server_script])
             async with stdio_client(params) as (r, w):
                 async with ClientSession(r, w) as session:
                     await session.initialize()
-                    result = await session.call_tool(tool_name, kwargs)
+                    result = await session.call_tool(tool_name, arguments=input)
                     return result.content[0].text if result.content else "{}"
         return asyncio.run(_inner())
     call.__name__ = tool_name
@@ -97,6 +97,7 @@ async def discover_tools(server_script: str) -> list:
                     func=_make_mcp_caller(t.name, server_script),
                     name=t.name,
                     description=t.description or f"MCP tool: {t.name}",
+                    args_schema=None,  # ← let the dict pass through as-is
                 )
                 tools.append(lc_tool)
             return tools, [t.name for t in raw.tools]
@@ -109,13 +110,19 @@ def extract_trace(result: dict) -> list:
     for m in result["messages"]:
         role    = getattr(m, "type", "unknown")
         content = m.content
-        if isinstance(content, list):
-            for block in content:
-                if isinstance(block, dict) and block.get("type") == "tool_use":
-                    trace.append({"role": "tool_call", "tool": block["name"],
-                                  "args": block.get("input", {})})
-        elif content:
+
+        if hasattr(m, "tool_calls") and m.tool_calls:
+            for tc in m.tool_calls:
+                trace.append({"role": "tool_call", "tool": tc["name"], "args": tc.get("args", {})})
+            continue
+
+        if role == "tool" and content:
+            trace.append({"role": "tool_result", "content": str(content)})
+            continue
+
+        if content:
             trace.append({"role": role, "content": str(content)})
+
     return trace
 
 
@@ -124,6 +131,11 @@ def print_trace(trace: list) -> None:
         if entry["role"] == "tool_call":
             args_str = json.dumps(entry.get("args", {}))[:80]
             print(f"  [TOOL_CALL] → {entry['tool']}({args_str})")
+        elif entry["role"] == "tool_result":
+            content = entry["content"]
+            if len(content) > 400:
+                content = content[:400] + "..."
+            print(f"  [TOOL_RESULT]\n  {content}\n")
         elif entry.get("content"):
             content = entry["content"]
             if len(content) > 400:
@@ -135,8 +147,9 @@ async def main() -> None:
     llm = ChatOpenAI(
         base_url="https://api.tokenfactory.nebius.com/v1/",
         api_key=os.getenv("NEBIUS_KEY"),
-        model="meta-llama/Llama-3.3-70B-Instruct",
+        model="Qwen/Qwen3-32B",
         temperature=0,
+        extra_body={"thinking": {"type": "disabled"}},
     )
 
     print("\nExercise 4 — LangGraph + MCP")
@@ -153,7 +166,10 @@ async def main() -> None:
     print(f"\n{'=' * 65}")
     print("  Query 1 — Search + Detail Fetch")
     print(f"{'=' * 65}\n")
-    r1     = agent.invoke({"messages": [("user", q1)]})
+    r1 = agent.invoke(
+        {"messages": [("user", q1)]},
+        config={"recursion_limit": 10},
+    )
     trace1 = extract_trace(r1)
     print_trace(trace1)
     output["queries"]["query_1"] = {"query": q1, "trace": trace1}
@@ -163,7 +179,10 @@ async def main() -> None:
     print(f"\n{'=' * 65}")
     print("  Query 2 — Impossible Constraint")
     print(f"{'=' * 65}\n")
-    r2     = agent.invoke({"messages": [("user", q2)]})
+    r2 = agent.invoke(
+        {"messages": [("user", q2)]},
+        config={"recursion_limit": 10},
+    )
     trace2 = extract_trace(r2)
     print_trace(trace2)
     output["queries"]["query_2"] = {"query": q2, "trace": trace2}

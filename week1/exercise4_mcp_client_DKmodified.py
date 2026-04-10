@@ -32,11 +32,6 @@ Results saved to week1/outputs/ex4_results.json (~30 seconds).
 Then fill in week1/answers/ex4_answers.py.
 """
 
-"""
-NOTE from DK: Task was completed with changed code for the collecting tool results (see exercise4_mcp_client_modified)
-"""
-
-
 import asyncio
 import json
 import os
@@ -70,13 +65,13 @@ OUTPUTS_DIR.mkdir(exist_ok=True)
 # every closure would share the last value of tool_name — a classic Python gotcha.
 
 def _make_mcp_caller(tool_name: str, server_script: str):
-    def call(**kwargs) -> str:
+    def call(input: dict) -> str:  # ← single dict, not **kwargs
         async def _inner() -> str:
             params = StdioServerParameters(command=sys.executable, args=[server_script])
             async with stdio_client(params) as (r, w):
                 async with ClientSession(r, w) as session:
                     await session.initialize()
-                    result = await session.call_tool(tool_name, kwargs)
+                    result = await session.call_tool(tool_name, arguments=input)
                     return result.content[0].text if result.content else "{}"
         return asyncio.run(_inner())
     call.__name__ = tool_name
@@ -102,6 +97,7 @@ async def discover_tools(server_script: str) -> list:
                     func=_make_mcp_caller(t.name, server_script),
                     name=t.name,
                     description=t.description or f"MCP tool: {t.name}",
+                    args_schema=None,  # ← let the dict pass through as-is
                 )
                 tools.append(lc_tool)
             return tools, [t.name for t in raw.tools]
@@ -115,17 +111,11 @@ def extract_trace(result: dict) -> list:
         role    = getattr(m, "type", "unknown")
         content = m.content
 
-        # FIX: tool calls live in message.tool_calls, not content blocks
         if hasattr(m, "tool_calls") and m.tool_calls:
             for tc in m.tool_calls:
-                trace.append({
-                    "role": "tool_call",
-                    "tool": tc["name"],
-                    "args": tc.get("args", {}),
-                })
+                trace.append({"role": "tool_call", "tool": tc["name"], "args": tc.get("args", {})})
             continue
 
-        # Capture tool results (the actual venue data coming back)
         if role == "tool" and content:
             trace.append({"role": "tool_result", "content": str(content)})
             continue
@@ -176,7 +166,10 @@ async def main() -> None:
     print(f"\n{'=' * 65}")
     print("  Query 1 — Search + Detail Fetch")
     print(f"{'=' * 65}\n")
-    r1     = agent.invoke({"messages": [("user", q1)]})
+    r1 = agent.invoke(
+        {"messages": [("user", q1)]},
+        config={"recursion_limit": 10},
+    )
     trace1 = extract_trace(r1)
     print_trace(trace1)
     output["queries"]["query_1"] = {"query": q1, "trace": trace1}
@@ -186,7 +179,10 @@ async def main() -> None:
     print(f"\n{'=' * 65}")
     print("  Query 2 — Impossible Constraint")
     print(f"{'=' * 65}\n")
-    r2     = agent.invoke({"messages": [("user", q2)]})
+    r2 = agent.invoke(
+        {"messages": [("user", q2)]},
+        config={"recursion_limit": 10},
+    )
     trace2 = extract_trace(r2)
     print_trace(trace2)
     output["queries"]["query_2"] = {"query": q2, "trace": trace2}
